@@ -2,7 +2,9 @@ const express = require("express");
 const { createTodo, updateTodo } = require("./Zod");
 const { todo } = require("./db");
 const app = express();
+const cors = require("cors");
 
+app.use(cors());
 app.use(express.json());
 
 app.post("/todo", async (req, res) => {
@@ -18,7 +20,7 @@ app.post("/todo", async (req, res) => {
   await todo.create({
     title: createPayload.title,
     description: createPayload.description,
-    completed: false
+    completed: false,
   });
   res.json({
     msg: "Todo created successfully!",
@@ -41,14 +43,17 @@ app.put("/completed", async (req, res) => {
     });
     return;
   }
-  await todo.update({
-    _id: req.body.id
-  }, {
-    completed: true
-  })
+  await todo.update(
+    {
+      _id: req.body.id,
+    },
+    {
+      completed: true,
+    }
+  );
   res.json({
-    msg: 'Todo marked as completed!'
-  })
+    msg: "Todo marked as completed!",
+  });
 });
 
 app.listen(3000, (req, res) => {
