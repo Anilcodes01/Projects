@@ -45,10 +45,13 @@ export function CreateTodo() {
         onClick={() => {
           fetch("http://localhost:3000/todo", {
             method: "POST",
-            body: {
-              title: "",
-              description: "",
-            },
+            body: JSON.stringify( {
+              title: title,
+              description: description,
+            }),
+            headers: {
+              'content-Type': 'application/json'
+            }
           }).then(async function (res) {
             const json = await res.json();
             alert("Todo added successfully!");
